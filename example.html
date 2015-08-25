@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/Flot/jquery.flot.js"></script>
+        <script src="bower_components/Flot/jquery.flot.time.js"></script>
+        <script src="jquery.flot.state.js"></script>
+        <script>
+            var dates = [
+                (new Date('2015-08-25T16:00:00')).getTime(),
+                (new Date('2015-08-25T17:00:00')).getTime(),
+                (new Date('2015-08-25T18:00:00')).getTime(),
+                (new Date('2015-08-25T19:00:00')).getTime(),
+                (new Date('2015-08-25T20:00:00')).getTime(),
+                (new Date('2015-08-25T21:00:00')).getTime(),
+                (new Date('2015-08-25T22:00:00')).getTime(),
+                (new Date('2015-08-25T23:00:00')).getTime(),
+                (new Date('2015-08-26T00:00:00')).getTime(),
+                (new Date('2015-08-26T01:00:00')).getTime(),
+                (new Date('2015-08-26T02:00:00')).getTime(),
+                (new Date('2015-08-26T03:00:00')).getTime(),
+                (new Date('2015-08-26T04:00:00')).getTime()
+            ];
+
+            var points = [];
+            var statePoints = [];
+            for(var i = 0; i < dates.length; i++){
+                var point = Math.random();
+                points.push([dates[i], point]);
+                var onOff = point > 0.5 ? 'Over':'Under';
+                statePoints.push([dates[i], onOff]);
+            }
+
+            var data = [
+                {
+                    xaxis: 1,
+                    yaxis: 1,
+                    label: 'Random data',
+                    data: points
+                },
+                {
+                    data: statePoints,
+                    xaxis: 2,
+                    yaxis: 2,
+                    label: false,
+                    state: {
+                        show: true,
+                        showText: true,
+                        label: "> 0.5?",
+                        states: {
+                            "Over": "rgba(0,255,0,1)", "Under": "rgba(255,0,0,1)"
+                        }
+                    }
+                }
+            ];
+
+            var options = {
+                series: {
+                    lines: { show: true },
+                    points: { show: true },
+                    shadowSize: 1
+                },
+                points: {
+                    radius: 1
+                },
+                lines: {
+                    lineWidth: 1
+                },
+                xaxes: [
+                    {
+                        mode: "time",
+                        timeformat: "%d/%m %H:%M",
+                        timezone: "browser",
+                        labelAngle: 45
+                    },
+                    {
+                        mode: "time",
+                        timeformat: "%d/%m %H:%M",
+                        timezone: "browser",
+                        labelAngle: 45
+                    }
+                ],
+                yaxes: [
+                    {},
+                    {
+                        reserveSpace: false,
+                        show: false
+                    }
+                ],
+                legend: {
+                    show: true,
+                    noColumns: 4
+                },
+                grid: {
+                    borderWidth: 1,
+                    borderColor: "#aaa",
+                    hoverable: true
+                }
+            };
+
+            $(document).ready(function(){
+                $.plot($("#graph"), data, options);
+            });
+        </script>
+    </head>
+    <body>
+        <div id="graph" style="width: 600px; height: 300px;"></div>
+    </body>
+</html>

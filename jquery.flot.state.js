@@ -8,12 +8,7 @@ for the series, which should be short since it must fit in the left y-axis
 label area. For colors, it takes a states object with a map of values to RGB
 colors. A typical options example with two states, Yes and No would look like
 this:
-series: {
-    title:"StateExample", state:true, stateLabel:"Y/N",
-    states:{
-        "Yes":"rgba(125,185,71,0.8)", "No":"rgba(255,255,255,0)"
-    }
-}
+
 
 The plugin takes a dataseries of different states, and will remove adjacent
 entries with the same state, since it is only concerned with the transition
@@ -26,14 +21,20 @@ that x-axis from the graph and re-use the area the x-axis occupied.
 
 (function ($) {
     var options = {
-        series: { state: { show: false } // true or false
+        series: {
+            state: {
+                show: false,
+                showText: false,
+                label: '',
+                states: []
+            }
         }
-    }
+    };
 
     function init(plot) {
         plot.hooks.processDatapoints.push(
             function(plot, series, datapoints) {
-                if (series.state != true)
+                if (series.state.show != true)
                     return;
 
                 // Eliminate redundant entries
@@ -59,7 +60,7 @@ that x-axis from the graph and re-use the area the x-axis occupied.
             });
         plot.hooks.drawSeries.push(
             function(plot, ctx, series) {
-                if (series.state != true)
+                if (series.state.show != true)
                     return;
 
                 var xaxis = plot.getAxes().xaxis;
@@ -71,7 +72,7 @@ that x-axis from the graph and re-use the area the x-axis occupied.
                 ctx.save();
                 ctx.fillStyle = "rgba(0,0,0,1)";
                 ctx.textAlign = "right";
-                ctx.fillText(series.stateLabel, box.left - 5, box.top + box.height - textMargin);
+                ctx.fillText(series.state.label, box.left - 5, box.top + box.height - textMargin);
                 ctx.textAlign = "left";
                 for (i = 0; i < series.data.length; i++) {
                     x = series.data[i][0];
@@ -102,15 +103,18 @@ that x-axis from the graph and re-use the area the x-axis occupied.
                             var boxWidth = xaxis.p2c(x + width) - xleft;
                             // Assign a color from states, or use the default
                             state = series.data[i][1];
-                            if (state in series.states)
-                                ctx.fillStyle = series.states[state];
+                            if (state in series.state.states)
+                                ctx.fillStyle = series.state.states[state];
                             else
                                 ctx.fillStyle = "rgba(255,255,255,0)";
                             ctx.fillRect(xleft + offset.left,
                                          box.top - textMargin,
                                          boxWidth,
                                          box.height + textMargin);
-                            if (ctx.measureText(series.data[i][1]).width < boxWidth) {
+
+                            if (ctx.measureText(series.data[i][1]).width < boxWidth
+                                && series.state.showText)
+                            {
                                 ctx.fillStyle = "rgba(0,0,0,1)";
                                 ctx.fillText(series.data[i][1],
                                              xleft + offset.left + textMargin,

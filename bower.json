@@ -1,0 +1,23 @@
+{
+  "name": "flot-state-plugin",
+  "version": "1.0.0",
+  "homepage": "https://github.com/magnusjt/flot-state-plugin",
+  "description": "fork of flot state plugin",
+  "main": "jquery.flot.state.js",
+  "keywords": [
+    "flot",
+    "state",
+    "plugin"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "Flot": "flot#~0.8.3"
+  }
+}
