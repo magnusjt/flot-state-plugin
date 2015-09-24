@@ -1,5 +1,5 @@
 {
-  "name": "jquery.flot.state.plugin",
+  "name": "jquery.flot.state",
   "version": "1.0.0",
   "description": "jQuery flot state plugin",
   "repository": {
